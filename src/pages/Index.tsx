@@ -1,12 +1,93 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Header } from '@/components/Header';
+import { LocationDisplay } from '@/components/LocationDisplay';
+import { NearbyZones } from '@/components/NearbyZones';
+import { FamousPlacesMonitor } from '@/components/FamousPlacesMonitor';
+import { AlertsPanel } from '@/components/AlertsPanel';
+import { FloodMap } from '@/components/FloodMap';
+import { StatusCard } from '@/components/StatusCard';
+import { useLocation } from '@/hooks/useLocation';
+import { useAlerts } from '@/hooks/useAlerts';
+import { Droplets, ThermometerSun, Wind, CloudRain } from 'lucide-react';
 
 const Index = () => {
+  const { location, loading, refetch } = useLocation();
+  const { alerts, soundEnabled, setSoundEnabled, clearAlerts } = useAlerts(location?.currentZone ?? null);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <main className="container mx-auto px-4 py-6 space-y-6">
+        {/* Stats row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatusCard
+            title="Active Alerts"
+            value="3"
+            subtitle="Across India"
+            icon={<CloudRain className="text-destructive" size={20} />}
+            variant="danger"
+          />
+          <StatusCard
+            title="Avg Water Level"
+            value="2.4m"
+            subtitle="+0.3m from yesterday"
+            icon={<Droplets className="text-accent" size={20} />}
+          />
+          <StatusCard
+            title="Temperature"
+            value="28°C"
+            subtitle="High humidity"
+            icon={<ThermometerSun className="text-zone-warning" size={20} />}
+            variant="warning"
+          />
+          <StatusCard
+            title="Wind Speed"
+            value="12 km/h"
+            subtitle="Normal conditions"
+            icon={<Wind className="text-zone-safe" size={20} />}
+            variant="safe"
+          />
+        </div>
+
+        {/* Main content grid */}
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Left column - Location and Nearby */}
+          <div className="lg:col-span-2 space-y-6">
+            <LocationDisplay
+              location={location}
+              loading={loading}
+              onRefresh={refetch}
+            />
+
+            <FloodMap location={location} />
+
+            <NearbyZones zones={location?.nearbyZones ?? []} />
+          </div>
+
+          {/* Right column - Alerts */}
+          <div className="space-y-6">
+            <AlertsPanel
+              alerts={alerts}
+              soundEnabled={soundEnabled}
+              onSoundToggle={() => setSoundEnabled(!soundEnabled)}
+              onClearAlerts={clearAlerts}
+            />
+          </div>
+        </div>
+
+        {/* Famous Places Section */}
+        <FamousPlacesMonitor />
+
+        {/* Footer info */}
+        <footer className="text-center py-8 text-sm text-muted-foreground border-t border-border">
+          <p className="mb-2">
+            🌊 FloodGuard India - Real-time Flood Monitoring & Early Warning System
+          </p>
+          <p className="text-xs">
+            Data updated every 5 minutes • Emergency helpline: 1800-XXX-XXXX
+          </p>
+        </footer>
+      </main>
     </div>
   );
 };
