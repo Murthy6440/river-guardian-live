@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { LocationDisplay } from '@/components/LocationDisplay';
 import { NearbyZones } from '@/components/NearbyZones';
@@ -9,6 +10,7 @@ import { EscapeRoutes } from '@/components/EscapeRoutes';
 import { FloodStatistics } from '@/components/FloodStatistics';
 import { SurvivalItems } from '@/components/SurvivalItems';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { useLocation } from '@/hooks/useLocation';
 import { useAlerts } from '@/hooks/useAlerts';
 import { Droplets, ThermometerSun, Wind, CloudRain } from 'lucide-react';
@@ -16,9 +18,14 @@ import { Droplets, ThermometerSun, Wind, CloudRain } from 'lucide-react';
 const Index = () => {
   const { location, loading, refetch } = useLocation();
   const { alerts, soundEnabled, setSoundEnabled, clearAlerts } = useAlerts(location?.currentZone ?? null);
+  const [showWelcome, setShowWelcome] = useState(true);
 
   if (loading) {
     return <LoadingScreen />;
+  }
+
+  if (showWelcome) {
+    return <WelcomeScreen onComplete={() => setShowWelcome(false)} />;
   }
 
   return (
