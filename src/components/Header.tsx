@@ -27,9 +27,9 @@ export function Header() {
             {/* Navigation */}
             <nav className="hidden md:flex items-center gap-1">
               <Link
-                to="/"
+                to="/dashboard"
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  location.pathname === '/'
+                  location.pathname === '/dashboard'
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
                 }`}
