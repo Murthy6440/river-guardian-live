@@ -1,4 +1,4 @@
-import { Droplets, Shield, AlertTriangle, BarChart3, Home } from 'lucide-react';
+import { Droplets, Shield, AlertTriangle, BarChart3, Home, CloudRain } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 export function Header() {
@@ -36,6 +36,17 @@ export function Header() {
               >
                 <Home size={16} />
                 Dashboard
+              </Link>
+              <Link
+                to="/weather"
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  location.pathname === '/weather'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                }`}
+              >
+                <CloudRain size={16} />
+                Weather
               </Link>
               <Link
                 to="/statistics"
