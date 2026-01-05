@@ -5,6 +5,9 @@ import { FamousPlacesMonitor } from '@/components/FamousPlacesMonitor';
 import { AlertsPanel } from '@/components/AlertsPanel';
 import { FloodMap } from '@/components/FloodMap';
 import { StatusCard } from '@/components/StatusCard';
+import { EscapeRoutes } from '@/components/EscapeRoutes';
+import { FloodStatistics } from '@/components/FloodStatistics';
+import { SurvivalItems } from '@/components/SurvivalItems';
 import { useLocation } from '@/hooks/useLocation';
 import { useAlerts } from '@/hooks/useAlerts';
 import { Droplets, ThermometerSun, Wind, CloudRain } from 'lucide-react';
@@ -61,10 +64,12 @@ const Index = () => {
 
             <FloodMap location={location} />
 
+            <EscapeRoutes />
+
             <NearbyZones zones={location?.nearbyZones ?? []} />
           </div>
 
-          {/* Right column - Alerts */}
+          {/* Right column - Alerts and Survival */}
           <div className="space-y-6">
             <AlertsPanel
               alerts={alerts}
@@ -72,8 +77,13 @@ const Index = () => {
               onSoundToggle={() => setSoundEnabled(!soundEnabled)}
               onClearAlerts={clearAlerts}
             />
+
+            <SurvivalItems />
           </div>
         </div>
+
+        {/* Statistics Section */}
+        <FloodStatistics />
 
         {/* Famous Places Section */}
         <FamousPlacesMonitor />
