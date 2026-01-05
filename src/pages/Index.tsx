@@ -13,11 +13,13 @@ import { LoadingScreen } from '@/components/LoadingScreen';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
 import { useLocation } from '@/hooks/useLocation';
 import { useAlerts } from '@/hooks/useAlerts';
+import { useWeather } from '@/hooks/useWeather';
 import { Droplets, ThermometerSun, Wind, CloudRain } from 'lucide-react';
 
 const Index = () => {
   const { location, loading, refetch } = useLocation();
   const { alerts, soundEnabled, setSoundEnabled, clearAlerts } = useAlerts(location?.currentZone ?? null);
+  const { weather } = useWeather(location?.lat ?? null, location?.lng ?? null);
   const [showWelcome, setShowWelcome] = useState(true);
 
   if (loading) {
@@ -50,15 +52,15 @@ const Index = () => {
           />
           <StatusCard
             title="Temperature"
-            value="28°C"
-            subtitle="High humidity"
+            value={weather ? `${weather.temperature}°C` : '--°C'}
+            subtitle={weather ? `Feels like ${weather.feelsLike}°C` : 'Loading...'}
             icon={<ThermometerSun className="text-zone-warning" size={20} />}
             variant="warning"
           />
           <StatusCard
             title="Wind Speed"
-            value="12 km/h"
-            subtitle="Normal conditions"
+            value={weather ? `${weather.windSpeed} km/h` : '-- km/h'}
+            subtitle={weather ? `Humidity ${weather.humidity}%` : 'Loading...'}
             icon={<Wind className="text-zone-safe" size={20} />}
             variant="safe"
           />
