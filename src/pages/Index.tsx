@@ -7,7 +7,7 @@ import { AlertsPanel } from '@/components/AlertsPanel';
 import { FloodMap } from '@/components/FloodMap';
 import { StatusCard } from '@/components/StatusCard';
 import { EscapeRoutes } from '@/components/EscapeRoutes';
-import { FloodStatistics } from '@/components/FloodStatistics';
+
 import { SurvivalItems } from '@/components/SurvivalItems';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { WelcomeScreen } from '@/components/WelcomeScreen';
@@ -95,9 +95,6 @@ const Index = () => {
             <SurvivalItems />
           </div>
         </div>
-
-        {/* Statistics Section */}
-        <FloodStatistics />
 
         {/* Famous Places Section */}
         <FamousPlacesMonitor />
