@@ -8,6 +8,7 @@ import { StatusCard } from '@/components/StatusCard';
 import { EscapeRoutes } from '@/components/EscapeRoutes';
 import { FloodStatistics } from '@/components/FloodStatistics';
 import { SurvivalItems } from '@/components/SurvivalItems';
+import { LoadingScreen } from '@/components/LoadingScreen';
 import { useLocation } from '@/hooks/useLocation';
 import { useAlerts } from '@/hooks/useAlerts';
 import { Droplets, ThermometerSun, Wind, CloudRain } from 'lucide-react';
@@ -15,6 +16,10 @@ import { Droplets, ThermometerSun, Wind, CloudRain } from 'lucide-react';
 const Index = () => {
   const { location, loading, refetch } = useLocation();
   const { alerts, soundEnabled, setSoundEnabled, clearAlerts } = useAlerts(location?.currentZone ?? null);
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
