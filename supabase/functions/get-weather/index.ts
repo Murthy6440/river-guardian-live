@@ -1,4 +1,3 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -13,14 +12,9 @@ serve(async (req) => {
 
   try {
     const { lat, lon } = await req.json();
-    const apiKey = Deno.env.get('OPENWEATHERMAP_API_KEY');
-
-    if (!apiKey) {
-      throw new Error('OpenWeatherMap API key not configured');
-    }
 
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m`
     );
 
     if (!response.ok) {
@@ -28,18 +22,33 @@ serve(async (req) => {
     }
 
     const data = await response.json();
+    const current = data.current;
+
+    // Map weather code to description
+    const getWeatherDescription = (code: number): string => {
+      if (code === 0) return 'Clear sky';
+      if (code <= 3) return 'Partly cloudy';
+      if (code <= 49) return 'Foggy';
+      if (code <= 59) return 'Drizzle';
+      if (code <= 69) return 'Rain';
+      if (code <= 79) return 'Snow';
+      if (code <= 99) return 'Thunderstorm';
+      return 'Unknown';
+    };
 
     const weatherData = {
-      temperature: Math.round(data.main.temp),
-      humidity: data.main.humidity,
-      windSpeed: Math.round(data.wind.speed * 3.6), // Convert m/s to km/h
-      description: data.weather[0]?.description || 'Unknown',
-      icon: data.weather[0]?.icon || '01d',
-      feelsLike: Math.round(data.main.feels_like),
-      pressure: data.main.pressure,
-      visibility: Math.round((data.visibility || 10000) / 1000), // Convert to km
-      clouds: data.clouds?.all || 0,
+      temperature: Math.round(current.temperature_2m),
+      humidity: current.relative_humidity_2m,
+      windSpeed: Math.round(current.wind_speed_10m),
+      description: getWeatherDescription(current.weather_code),
+      icon: current.weather_code <= 3 ? '01d' : '03d',
+      feelsLike: Math.round(current.apparent_temperature),
+      pressure: Math.round(current.pressure_msl),
+      visibility: 10,
+      clouds: current.cloud_cover,
     };
+
+    console.log('Weather data fetched successfully:', weatherData);
 
     return new Response(JSON.stringify(weatherData), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
