@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      flood_alerts: {
+        Row: {
+          id: string
+          latitude: number | null
+          longitude: number | null
+          message: string
+          notifications_sent: number | null
+          sent_at: string
+          sms_sent: number | null
+          water_level: number | null
+          zone_level: string
+          zone_name: string
+        }
+        Insert: {
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          message: string
+          notifications_sent?: number | null
+          sent_at?: string
+          sms_sent?: number | null
+          water_level?: number | null
+          zone_level: string
+          zone_name: string
+        }
+        Update: {
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          message?: string
+          notifications_sent?: number | null
+          sent_at?: string
+          sms_sent?: number | null
+          water_level?: number | null
+          zone_level?: string
+          zone_name?: string
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          phone_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          phone_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          phone_number?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
